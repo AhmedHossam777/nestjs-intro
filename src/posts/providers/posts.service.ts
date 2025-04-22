@@ -21,7 +21,6 @@ export class PostsService {
   public async create(@Body() createPostDto: CreatePostDto) {
     const post = this.postRepository.create(createPostDto);
 
-    // Save and return post
     return await this.postRepository.save(post);
   }
 
@@ -36,18 +35,21 @@ export class PostsService {
   }
 
   public async deleteOne(postId: number) {
-    // find the post
-
-    const post = await this.postRepository.findOneBy({
-      id: postId,
+    // find the post WITH relations loaded
+    const post = await this.postRepository.findOne({
+      where: { id: postId },
+      relations: ['metaOptions'],
     });
-    // delete the post
 
-    await this.postRepository.delete(postId);
-    // delete the related metaOptions
+    if (!post) {
+      return {
+        deleted: false,
+        id: postId,
+        message: 'Post not found',
+      };
+    }
 
-    // await this.metaOptionsRepository.delete(post.metaOptions.id);
-    // confirmation
+    await this.postRepository.remove(post);
 
     return {
       deleted: true,
