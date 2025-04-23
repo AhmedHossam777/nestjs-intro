@@ -58,9 +58,4 @@ export class Tag {
 
   @DeleteDateColumn()
   delete_date: Date;
-
-  @ManyToOne(() => Post, (post) => post.tags, {
-    onDelete: 'CASCADE',
-  })
-  post?: Post;
 }

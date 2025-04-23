@@ -6,6 +6,8 @@ import {
   JoinColumn,
   OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { postType } from '../enums/postType.enum';
 import { postStatus } from '../enums/postStatus.enum';
@@ -79,13 +81,13 @@ export class Post {
   })
   metaOptions?: MetaOption;
 
-  @OneToMany(() => Tag, (tag) => tag.post)
-  @JoinColumn()
-  tags?: Tag[];
-
   @ManyToOne(() => User, (user) => user.posts, {
     onDelete: 'CASCADE',
     eager: true,
   })
   author: User;
+
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags?: Tag[];
 }
