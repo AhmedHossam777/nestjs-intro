@@ -11,7 +11,6 @@ import {
   IsUrl,
   Matches,
   MaxLength,
-  Min,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -20,7 +19,6 @@ import { Type } from 'class-transformer';
 import { postStatus } from '../enums/postStatus.enum';
 import { postType } from '../enums/postType.enum';
 import { CreateMetaOptionDto } from '../../meta-option/dto/create-meta-option.dto';
-import { Tag } from '../../tag/entities/tag.entity';
 
 export class CreatePostDto {
   @ApiProperty({

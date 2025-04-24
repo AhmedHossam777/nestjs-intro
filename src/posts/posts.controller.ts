@@ -60,9 +60,12 @@ export class PostsController {
     status: 200,
     description: 'A 200 response if the post is updated successfully',
   })
-  @Patch()
-  public updatePost(@Body() patchPostsDto: PatchPostDto) {
-    console.log(patchPostsDto);
+  @Patch(':id')
+  public updatePost(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchPostsDto: PatchPostDto,
+  ) {
+    return this.postsService.update(id, patchPostsDto);
   }
 
   @ApiOperation({
