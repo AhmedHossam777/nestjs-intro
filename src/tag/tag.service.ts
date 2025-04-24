@@ -39,8 +39,12 @@ export class TagService {
   }
 
   async remove(id: number) {
-    return await this.tagRepository.remove(
-      await this.tagRepository.findOneBy({ id }),
-    );
+    await this.tagRepository.delete(id);
+    return { deleted: true, id };
+  }
+
+  async softDelete(id: number) {
+    await this.tagRepository.softDelete(id);
+    return { deleted: true, id };
   }
 }

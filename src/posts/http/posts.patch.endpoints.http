@@ -2,7 +2,7 @@ PATCH http://localhost:3000/api/posts/61
 Content-Type: application/json
 
 {
-    "title": "What's new with NestJS",
+    "title": "What's new with NestJS and GraphQL",
     "postType": "post",
     "slug": "new-with-nestjs-34223",
     "status": "draft",
@@ -11,7 +11,7 @@ Content-Type: application/json
     "featuredImageUrl": "http://localhost.com/images/image1.jpg",
     "publishOn": "2024-03-16T07:46:32+0000",
     "tagsIds": [
-        5
+        6
     ],
     "metaOptions": {
         "meta_value": "{\"key\":\"value\"}"

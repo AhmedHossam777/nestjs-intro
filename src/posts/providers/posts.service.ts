@@ -61,13 +61,14 @@ export class PostsService {
     });
 
     post.tags = tags;
-    post.title = patchPostDto.title;
-    post.content = patchPostDto.content;
-    post.slug = patchPostDto.slug;
-    post.status = patchPostDto.status;
-    post.postType = patchPostDto.postType;
-    post.featuredImageUrl = patchPostDto.featuredImageUrl;
-    post.schema = patchPostDto.schema;
+    post.title = patchPostDto.title ?? post.title;
+    post.content = patchPostDto.content ?? post.content;
+    post.slug = patchPostDto.slug ?? post.slug;
+    post.status = patchPostDto.status ?? post.status;
+    post.postType = patchPostDto.postType ?? post.postType;
+    post.featuredImageUrl =
+      patchPostDto.featuredImageUrl ?? post.featuredImageUrl;
+    post.schema = patchPostDto.schema ?? post.schema;
 
     return await this.postRepository.save(post);
   }
