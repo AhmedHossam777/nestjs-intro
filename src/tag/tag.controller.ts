@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
@@ -26,17 +27,25 @@ export class TagController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tagService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.tagService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagService.update(+id, updateTagDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTagDto: UpdateTagDto,
+  ) {
+    return this.tagService.update(id, updateTagDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.tagService.remove(id);
+  }
+
+  @Delete('/soft-delete/:id')
+  softDelete(@Param('id', ParseIntPipe) id: number) {
+    return this.tagService.softDelete(id);
   }
 }

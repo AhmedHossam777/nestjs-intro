@@ -7,6 +7,7 @@ import {
   DeleteDateColumn,
   JoinColumn,
   ManyToOne,
+  ManyToMany,
 } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
 
@@ -59,8 +60,8 @@ export class Tag {
   @DeleteDateColumn()
   delete_date: Date;
 
-  @ManyToOne(() => Post, (post) => post.tags, {
+  @ManyToMany(() => Post, (post) => post.tags, {
     onDelete: 'CASCADE',
   })
-  post?: Post;
+  posts: Post[];
 }

@@ -3,14 +3,16 @@ import {
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,
-  JoinColumn,
-  OneToMany,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { postType } from '../enums/postType.enum';
 import { postStatus } from '../enums/postStatus.enum';
 import { MetaOption } from '../../meta-option/entities/meta-option.entity';
 import { Tag } from '../../tag/entities/tag.entity';
-import { CreateMetaOptionDto } from '../../meta-option/dto/create-meta-option.dto';
+import { User } from '../../users/entities/user.entity';
+
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
@@ -72,11 +74,20 @@ export class Post {
   })
   publishOn?: Date;
 
-  @OneToOne(() => MetaOption)
-  @JoinColumn()
+  @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
+    cascade: true,
+  })
   metaOptions?: MetaOption;
 
-  @OneToMany(() => Tag, (tag) => tag.post)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
+  author: User;
+
+  @ManyToMany(() => Tag, (tag) => tag.posts, {
+    eager: true,
+  })
+  @JoinTable()
   tags?: Tag[];
 }
