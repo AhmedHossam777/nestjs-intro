@@ -8,6 +8,11 @@ import { UsersModule } from './users/users.module';
 import { TagModule } from './tag/tag.module';
 import { MetaOptionModule } from './meta-option/meta-option.module';
 
+// Configurations for the application
+import { ConfigModule, ConfigService } from './config';
+
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
 @Module({
   imports: [
     UsersModule,
@@ -15,19 +20,20 @@ import { MetaOptionModule } from './meta-option/meta-option.module';
     AuthModule,
     TagModule,
     MetaOptionModule,
+    ConfigModule,
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        // entities: [__dirname + '/**/*.entity{.ts],.js}'],
-        port: 5432,
-        username: 'postgres',
-        password: 'postgres',
-        host: 'localhost',
-        database: 'postgres',
-        synchronize: true,
-        autoLoadEntities: true,
+        port: configService.database.port,
+        host: configService.database.host,
+        username: configService.database.username,
+        password: configService.database.password,
+        database: configService.database.database,
+        synchronize: configService.database.synchronize,
+        autoLoadEntities: configService.database.autoLoadEntities,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
   ],
