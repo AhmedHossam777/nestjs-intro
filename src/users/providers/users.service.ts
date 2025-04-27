@@ -9,31 +9,26 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
-/**
- * Controller class for '/users' API endpoint
- */
 @Injectable()
 export class UsersService {
   constructor(
-    /**
-     * Injecting User repository into UsersService
-     * */
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
-    // Check if user with email exists
-    const existingUser = await this.usersRepository.findOne({
+    let existingUser = undefined;
+
+    existingUser = await this.usersRepository.findOne({
       where: { email: createUserDto.email },
     });
 
-    /**
-     * Handle exceptions if user exists later
-     * */
+    if (existingUser) {
+      throw new BadRequestException(
+        `User with email ${createUserDto.email} already exists`,
+      );
+    }
 
-    // Try to create a new user
-    // - Handle Exceptions Later
     let newUser = this.usersRepository.create(createUserDto);
     newUser = await this.usersRepository.save(newUser);
 

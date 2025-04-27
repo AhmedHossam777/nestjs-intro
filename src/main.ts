@@ -1,7 +1,8 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AllExceptionsFilter } from './common/filters';
 
 import { AppModule } from './app.module';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -16,6 +17,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Use global exception filter
+  const httpAdapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
 
   /**
    * swagger configuration
