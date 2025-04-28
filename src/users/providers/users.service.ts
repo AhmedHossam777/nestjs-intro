@@ -1,13 +1,10 @@
 import { GetUsersParamDto } from '../dtos/get-users-param.dto';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { UsersCreateManyProvider } from './users-create-many.provider';
 
 @Injectable()
 export class UsersService {
@@ -15,8 +12,10 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
 
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
+
     // inject datasouce
-    private readonly datasouce: DataSource,
+    private readonly datasource: DataSource,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
@@ -40,32 +39,7 @@ export class UsersService {
   }
 
   public async createManyUsers(createUserDtos: CreateUserDto[]) {
-    let newUsers: User[] = [];
-
-    // create a QueryRunner instance
-    const queryRunner = this.datasouce.createQueryRunner();
-    // open a connection from query runner to datasource
-    await queryRunner.connect();
-    // start transactions
-    await queryRunner.startTransaction();
-    try {
-      for (let createUseraDto of createUserDtos) {
-        let newUser = queryRunner.manager.create(User, createUseraDto);
-        let result = await queryRunner.manager.save(newUser);
-        newUsers.push(result);
-      }
-      // commit transaction
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      // if error rollback
-      await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException(error);
-    } finally {
-      // release transaction
-      await queryRunner.release();
-    }
-
-    return newUsers;
+    return await this.usersCreateManyProvider.createManyUsers(createUserDtos);
   }
 
   /**
