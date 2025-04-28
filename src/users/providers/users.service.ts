@@ -1,19 +1,22 @@
 import { GetUsersParamDto } from '../dtos/get-users-param.dto';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
+import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
+
+    // inject datasouce
+    private readonly datasource: DataSource,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
@@ -34,6 +37,12 @@ export class UsersService {
 
     // Create the user
     return newUser;
+  }
+
+  public async createManyUsers(createManyUsersDto: CreateManyUsersDto) {
+    return await this.usersCreateManyProvider.createManyUsers(
+      createManyUsersDto,
+    );
   }
 
   /**
