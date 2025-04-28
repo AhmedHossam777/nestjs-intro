@@ -14,6 +14,7 @@ import { GetUsersParamDto } from './dtos/get-users-param.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { UsersService } from './providers/users.service';
 import { ApiTags, ApiQuery, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CreateManyUsersDto } from './dtos/create-many-users.dto';
 
 @Controller('api/users')
 @ApiTags('Users')
@@ -60,8 +61,8 @@ export class UsersController {
   }
 
   @Post('create-many')
-  public createManyUsers(@Body() createUserDtos: CreateUserDto[]) {
-    return this.usersService.createManyUsers(createUserDtos);
+  public createManyUsers(@Body() createManyUsersDto: CreateManyUsersDto) {
+    return this.usersService.createManyUsers(createManyUsersDto);
   }
 
   @Patch()

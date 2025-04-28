@@ -5,6 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -38,8 +39,10 @@ export class UsersService {
     return newUser;
   }
 
-  public async createManyUsers(createUserDtos: CreateUserDto[]) {
-    return await this.usersCreateManyProvider.createManyUsers(createUserDtos);
+  public async createManyUsers(createManyUsersDto: CreateManyUsersDto) {
+    return await this.usersCreateManyProvider.createManyUsers(
+      createManyUsersDto,
+    );
   }
 
   /**
