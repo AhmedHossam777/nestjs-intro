@@ -4,12 +4,12 @@ Content-Type: application/json
 {
   "title": "What's new with NestJS",
   "postType": "post",
-  "slug": "new-with-nestjs-34223",
+  "slug": "new-with-nestjs-3422231233",
   "status": "draft",
   "content": "test content",
   "schema": "{\r\n \"@context\": \"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n }",
   "featuredImageUrl": "http://localhost.com/images/image1.jpg",
-  "publishOn": "2024-03-16T07:46:32+0000",
+  "publishOn": "2025-05-03T13:40:39.076Z",
   "tagsIds": [
     1,4
   ],

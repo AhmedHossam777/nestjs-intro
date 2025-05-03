@@ -1,5 +1,5 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionsFilter } from './common/filters';
+import { AllExceptionsFilter } from './common';
 
 import { AppModule } from './app.module';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
@@ -15,6 +15,9 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

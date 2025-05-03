@@ -12,6 +12,7 @@ import { MetaOptionModule } from './meta-option/meta-option.module';
 import { ConfigModule, ConfigService } from './config';
 
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { PaginationModule } from './common/pagination/pagination.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
