@@ -2,13 +2,13 @@ import {
   Inject,
   Injectable,
   forwardRef,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 
 import { UsersService } from 'src/users/providers/users.service';
 import { LoginDto } from '../dto/login.dto';
 import { HashingProvider } from './hashing.provider';
+import { ConfigService } from '../../config';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +18,8 @@ export class AuthService {
     private readonly usersService: UsersService,
     // Injecting HashingProvider
     private readonly hashingProvider: HashingProvider,
+    // Injecting ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   public async login(loginDto: LoginDto) {

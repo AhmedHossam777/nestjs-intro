@@ -19,9 +19,9 @@ export const configValidationSchema = Joi.object({
 
   // jwt configurations validation
   JWT_SECRET: Joi.string().required(),
-  JWT_REFRESH_SECRET: Joi.string().required(),
-  JWT_EXPIRES_IN: Joi.number().required(),
-  JWT_REFRESH_EXPIRES_IN: Joi.number().required(),
+  JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+  JWT_TOKEN_TTL: Joi.number().required(),
+  JWT_REFRESH_TOKEN_TTL: Joi.number().required(),
   JWT_TOKEN_AUDIENCE: Joi.string().required(),
   JWT_TOKEN_ISSUER: Joi.string().required(),
 });

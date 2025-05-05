@@ -17,9 +17,9 @@ export default (): Config => ({
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'secret',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || 'refreshSecret',
-    expiresIn: parseInt(process.env.JWT_EXPIRES_IN, 10) || 3600,
-    refreshExpiresIn: parseInt(process.env.JWT_REFRESH_EXPIRES_IN, 10) || 86400,
+    refreshSecret: process.env.JWT_REFRESH_TOKEN_SECRET || 'refreshSecret',
+    expiresIn: parseInt(process.env.JWT_TOKEN_TTL, 10) || 3600,
+    refreshExpiresIn: parseInt(process.env.JWT_REFRESH_TOKEN_TTL, 10) || 86400,
     tokenAudience: process.env.JWT_TOKEN_AUDIENCE || 'audience',
     tokenIssuer: process.env.JWT_TOKEN_ISSUER,
   },

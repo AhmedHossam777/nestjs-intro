@@ -4,6 +4,8 @@ import { AuthService } from './providers/auth.service';
 import { UsersModule } from '../users/users.module';
 import { BcryptProvider } from './providers/bcrypt.provider';
 import { HashingProvider } from './providers/hashing.provider';
+import { ConfigModule, ConfigService } from '../config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [AuthController],
@@ -14,7 +16,22 @@ import { HashingProvider } from './providers/hashing.provider';
       useClass: BcryptProvider,
     },
   ],
-  imports: [forwardRef(() => UsersModule)],
+  imports: [
+    forwardRef(() => UsersModule),
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.jwt.secret,
+        signOptions: {
+          expiresIn: configService.jwt.expiresIn,
+          issuer: configService.jwt.tokenIssuer,
+          audience: configService.jwt.tokenAudience,
+        },
+      }),
+    }),
+  ],
   exports: [AuthService, HashingProvider],
 })
 export class AuthModule {}
