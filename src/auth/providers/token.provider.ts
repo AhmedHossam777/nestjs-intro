@@ -32,7 +32,7 @@ export class TokenProvider {
         issuer: this.configService.jwt.tokenIssuer,
         audience: this.configService.jwt.tokenAudience,
       });
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid token');
     }
   }

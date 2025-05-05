@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
+import { PatchUserDto } from '../dtos/patch-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -57,5 +58,18 @@ export class UsersService {
    */
   public findOneByEmail(email: string) {
     return this.usersRepository.findOneBy({ email });
+  }
+
+  public async updateUser(id: number, updateUserDto: PatchUserDto) {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    // update the user
+    await this.usersRepository.update(id, updateUserDto);
+
+    // return the updated user
+    return this.findOneById(id);
   }
 }
