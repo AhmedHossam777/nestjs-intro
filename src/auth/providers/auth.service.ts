@@ -9,6 +9,7 @@ import { UsersService } from 'src/users/providers/users.service';
 import { LoginDto } from '../dto/login.dto';
 import { HashingProvider } from './hashing.provider';
 import { ConfigService } from '../../config';
+import { TokenProvider } from './token.provider';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,8 @@ export class AuthService {
     private readonly hashingProvider: HashingProvider,
     // Injecting ConfigService
     private readonly configService: ConfigService,
+    // Injecting TokenProvider
+    private readonly tokenProvider: TokenProvider,
   ) {}
 
   public async login(loginDto: LoginDto) {
@@ -37,10 +40,12 @@ export class AuthService {
       throw new UnauthorizedException('wrong email or password');
     }
 
-    return user;
-  }
+    // Generate access token
+    const accessToken = await this.tokenProvider.generateAccessToken(
+      user.id,
+      user.email,
+    );
 
-  public isAuth() {
-    return true;
+    return accessToken;
   }
 }
