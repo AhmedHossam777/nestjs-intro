@@ -1,6 +1,15 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  forwardRef,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 import { UsersService } from 'src/users/providers/users.service';
+import { LoginDto } from '../dto/login.dto';
+import { HashingProvider } from './hashing.provider';
+import { ConfigService } from '../../config';
+import { TokenProvider } from './token.provider';
 
 @Injectable()
 export class AuthService {
@@ -8,15 +17,35 @@ export class AuthService {
     // Injecting UserService
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    // Injecting HashingProvider
+    private readonly hashingProvider: HashingProvider,
+    // Injecting ConfigService
+    private readonly configService: ConfigService,
+    // Injecting TokenProvider
+    private readonly tokenProvider: TokenProvider,
   ) {}
 
-  public login(email: string, password: string, id: number) {
-    const user = this.usersService.findOneById(id);
-    // login
-    return 'SAMPLE_TOKEN';
-  }
+  public async login(loginDto: LoginDto) {
+    const user = await this.usersService.findOneByEmail(loginDto.email);
+    // Check if user exists
+    if (!user) {
+      throw new UnauthorizedException('wrong email or password');
+    }
+    const isPasswordValid = await this.hashingProvider.comparePassword(
+      loginDto.password,
+      user.password,
+    );
 
-  public isAuth() {
-    return true;
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('wrong email or password');
+    }
+
+    // Generate access token
+    const accessToken = await this.tokenProvider.generateAccessToken(
+      user.id,
+      user.email,
+    );
+
+    return accessToken;
   }
 }

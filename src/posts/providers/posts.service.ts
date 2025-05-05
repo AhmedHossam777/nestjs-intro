@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '../../tag/tag.service';
 import { PatchPostDto } from '../dtos/patch-post.dto';
 import { GetPostsDto } from '../dtos/get-posts.dto';
-import { PaginationProvider } from '../../common/pagination/provider/pagination.provider';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
 import { PaginatedInterface } from '../../common/pagination/interfaces/paginated.interface';
 
 @Injectable()

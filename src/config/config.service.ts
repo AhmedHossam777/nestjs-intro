@@ -6,15 +6,15 @@ import { Config } from './config.interface';
 export class ConfigService {
   constructor(private readonly configService: NestConfigService<Config>) {}
 
-  get app() {
+  get app(): Config['app'] {
     return this.configService.get('app');
   }
 
-  get database() {
+  get database(): Config['database'] {
     return this.configService.get('database');
   }
 
-  get jwt() {
+  get jwt(): Config['jwt'] {
     return this.configService.get('jwt');
   }
 }
