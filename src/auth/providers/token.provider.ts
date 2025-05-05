@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '../../config';
 import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from '../interface/token-payload.interface';
 
 @Injectable()
 export class TokenProvider {
@@ -22,5 +23,17 @@ export class TokenProvider {
         audience: this.configService.jwt.tokenAudience,
       },
     );
+  }
+
+  public async verifyToken(token: string): Promise<TokenPayload> {
+    try {
+      return await this.jwtService.verifyAsync(token, {
+        secret: this.configService.jwt.secret,
+        issuer: this.configService.jwt.tokenIssuer,
+        audience: this.configService.jwt.tokenAudience,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }
