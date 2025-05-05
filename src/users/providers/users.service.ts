@@ -19,26 +19,6 @@ export class UsersService {
     private readonly datasource: DataSource,
   ) {}
 
-  public async createUser(createUserDto: CreateUserDto) {
-    let existingUser = undefined;
-
-    existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
-
-    if (existingUser) {
-      throw new BadRequestException(
-        `User with email ${createUserDto.email} already exists`,
-      );
-    }
-
-    let newUser = this.usersRepository.create(createUserDto);
-    newUser = await this.usersRepository.save(newUser);
-
-    // Create the user
-    return newUser;
-  }
-
   public async createManyUsers(createManyUsersDto: CreateManyUsersDto) {
     return await this.usersCreateManyProvider.createManyUsers(
       createManyUsersDto,
@@ -70,5 +50,12 @@ export class UsersService {
    */
   public findOneById(id: number) {
     return this.usersRepository.findOneBy({ id });
+  }
+
+  /**
+   * Public method used to find one user using the email of the user
+   */
+  public findOneByEmail(email: string) {
+    return this.usersRepository.findOneBy({ email });
   }
 }
