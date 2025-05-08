@@ -69,7 +69,7 @@ export class UsersController {
     return this.usersService.createManyUsers(createManyUsersDto);
   }
 
-  @UseGuards(AccessTokenGuardGuard)
+  // @UseGuards(AccessTokenGuardGuard)
   @Patch(':id')
   public async patchUser(
     @Param('id', ParseIntPipe) id: number,
