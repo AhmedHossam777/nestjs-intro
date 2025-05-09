@@ -34,6 +34,6 @@ import { TokenProvider } from './providers/token.provider';
       }),
     }),
   ],
-  exports: [AuthService, HashingProvider],
+  exports: [AuthService, HashingProvider, TokenProvider],
 })
 export class AuthModule {}

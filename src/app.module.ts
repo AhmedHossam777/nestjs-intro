@@ -13,6 +13,9 @@ import { ConfigModule, ConfigService } from './config';
 
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { PaginationModule } from './common/pagination/pagination.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './auth/guards/access-token.guard/access-token.guard';
+import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 
 @Module({
   imports: [
@@ -40,6 +43,13 @@ import { PaginationModule } from './common/pagination/pagination.module';
     PaginationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
+    },
+    AccessTokenGuard,
+  ],
 })
 export class AppModule {}

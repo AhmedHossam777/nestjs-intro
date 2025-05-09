@@ -10,6 +10,7 @@ import { PatchPostDto } from '../dtos/patch-post.dto';
 import { GetPostsDto } from '../dtos/get-posts.dto';
 import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
 import { PaginatedInterface } from '../../common/pagination/interfaces/paginated.interface';
+import { TokenPayload } from '../../auth/interface/token-payload.interface';
 
 @Injectable()
 export class PostsService {
@@ -27,9 +28,14 @@ export class PostsService {
     public readonly metaOptionsRepository: Repository<MetaOption>,
   ) {}
 
-  public async create(@Body() createPostDto: CreatePostDto) {
-    const { authorId, tagsIds } = createPostDto;
-    const author = await this.usersService.findOneById(authorId);
+  public async create(
+    @Body() createPostDto: CreatePostDto,
+    activeUserPayload: TokenPayload,
+  ) {
+    const { tagsIds } = createPostDto;
+    const author = await this.usersService.findOneById(
+      activeUserPayload.userId,
+    );
     const tags = await this.tagsService.findMany(tagsIds);
 
     const post = this.postRepository.create({
