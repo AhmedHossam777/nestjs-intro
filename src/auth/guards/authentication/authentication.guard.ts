@@ -11,8 +11,7 @@ import { AUTH_TYPE_KEY } from '../../constants/auth.constant';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  private static readonly defaultAuthType = AuthType.Bearer;
-
+  // the lines blow means that each key must be of AuthType and each value must be CanActivate | CanActivate[
   private readonly authTypeGuardMap: Record<
     AuthType,
     CanActivate | CanActivate[]
@@ -25,30 +24,29 @@ export class AuthenticationGuard implements CanActivate {
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard,
   ) {}
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // get authType from reflector class
     const authTypes: AuthType[] = this.reflector.getAllAndOverride(
       AUTH_TYPE_KEY,
       [context.getHandler(), context.getClass()],
-    ) ?? [AuthenticationGuard.defaultAuthType];
-    // create array of guards : this will contains guard for each of auth types
+    ) ?? [AuthType.Bearer];
+
     const guards = authTypes
       .map((authType) => this.authTypeGuardMap[authType])
       .flat();
-    // loop through this array of guards and fire canActivate method
+
     for (const guard of guards) {
       const canActivate = await Promise.resolve(
         guard.canActivate(context),
       ).catch((err) => {
         console.error(err);
-        return false; // Return false on error
+        return false;
       });
 
       if (canActivate) {
         return true;
       }
     }
+
     throw new UnauthorizedException();
   }
 }
