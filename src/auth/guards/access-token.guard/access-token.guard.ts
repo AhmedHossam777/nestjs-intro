@@ -7,7 +7,7 @@ import {
 import { TokenProvider } from '../../providers/token.provider';
 
 @Injectable()
-export class AccessTokenGuardGuard implements CanActivate {
+export class AccessTokenGuard implements CanActivate {
   constructor(private readonly tokenProvider: TokenProvider) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
