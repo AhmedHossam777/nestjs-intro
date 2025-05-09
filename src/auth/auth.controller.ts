@@ -1,6 +1,8 @@
 import { AuthService } from './providers/auth.service';
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
+import { Auth } from './decorators/auth.decorator';
+import { AuthType } from './enums/auth-type.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +14,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @Auth(AuthType.None)
   @HttpCode(HttpStatus.OK)
   public async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);

@@ -30,7 +30,7 @@ export class AccessTokenGuard implements CanActivate {
     }
     request['user'] = payload;
 
-    console.log('payload : ', payload);
+    // console.log('payload : ', payload);
     return true;
   }
 }

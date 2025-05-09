@@ -14,15 +14,12 @@ export class TokenProvider {
     userId: number,
     email: string,
   ): Promise<string> {
-    return this.jwtService.signAsync(
-      { userId, email },
-      {
-        secret: this.configService.jwt.secret,
-        expiresIn: this.configService.jwt.expiresIn,
-        issuer: this.configService.jwt.tokenIssuer,
-        audience: this.configService.jwt.tokenAudience,
-      },
-    );
+    return this.jwtService.signAsync({ userId, email } as TokenPayload, {
+      secret: this.configService.jwt.secret,
+      expiresIn: this.configService.jwt.expiresIn,
+      issuer: this.configService.jwt.tokenIssuer,
+      audience: this.configService.jwt.tokenAudience,
+    });
   }
 
   public async verifyToken(token: string): Promise<TokenPayload> {

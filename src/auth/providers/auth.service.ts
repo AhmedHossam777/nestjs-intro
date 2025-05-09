@@ -1,7 +1,7 @@
 import {
+  forwardRef,
   Inject,
   Injectable,
-  forwardRef,
   UnauthorizedException,
 } from '@nestjs/common';
 
@@ -41,11 +41,6 @@ export class AuthService {
     }
 
     // Generate access token
-    const accessToken = await this.tokenProvider.generateAccessToken(
-      user.id,
-      user.email,
-    );
-
-    return accessToken;
+    return await this.tokenProvider.generateAccessToken(user.id, user.email);
   }
 }
